@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Chatbot UI</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 30px; }
+    #chat { border: 1px solid #ccc; padding: 10px; height: 300px; overflow-y: auto; }
+    #userInput { width: 80%; }
+    button { padding: 6px 12px; }
+    .user-msg { color: blue; }
+    .bot-msg { color: green; }
+  </style>
+</head>
+<body>
+
+<h2>Chatbot</h2>
+<div id="chat"></div>
+
+<input type="text" id="userInput" placeholder="Type your message..." />
+<button onclick="sendMessage()">Send</button>
+
+<script>
+  const chatDiv = document.getElementById('chat');
+  const userInput = document.getElementById('userInput');
+
+  function addMessage(text, sender) {
+    const p = document.createElement('p');
+    p.textContent = text;
+    p.className = sender === 'user' ? 'user-msg' : 'bot-msg';
+    chatDiv.appendChild(p);
+    chatDiv.scrollTop = chatDiv.scrollHeight;
+  }
+
+  async function sendMessage() {
+    const message = userInput.value.trim();
+    if (!message) return;
+
+    addMessage('You ==> ' + message, 'user');
+    userInput.value = '';
+
+    const response = await fetch('/chat', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({message})
+    });
+
+    const data = await response.json();
+    addMessage('Bot ==> ' + data.reply, 'bot');
+  }
+
+  userInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter') sendMessage();
+  });
+</script>
+
+</body>
+</html>
