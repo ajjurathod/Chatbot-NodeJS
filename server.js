@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const path = require('path');
 const Chatbot = require('./Chatbot');
 
 const app = express();
@@ -11,6 +12,11 @@ app.use(bodyParser.json());
 // Simple route to test server
 app.get('/', (req, res) => {
     res.send('Chatbot server is running!');
+});
+
+// Serve chat UI page
+app.get('/chat-ui', (req, res) => {
+    res.sendFile(path.join(__dirname, 'chat.html'));
 });
 
 // Endpoint to handle chatbot messages
