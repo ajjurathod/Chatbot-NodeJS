@@ -1,21 +1,22 @@
-const natural = require('natural');
-const tokenizer = new natural.WordTokenizer();
-
 function ChatbotReply(message) {
-    const tokens = tokenizer.tokenize(message.toLowerCase());
+    const Bot_Age = 22;
+    const Bot_Name = "Abdelrahman Radwan";
+    const Bot_University = "Ain Shams University";
+    const Bot_Country = "Egypt";
 
-    if (tokens.includes('hi') || tokens.includes('hello') || tokens.includes('hey')) {
-        return "Hi there!";
-    }
-    if (tokens.includes('bye') || tokens.includes('goodbye')) {
-        return "Goodbye! Have a nice day!";
-    }
-    if (tokens.includes('thanks') || tokens.includes('thank')) {
-        return "You're welcome!";
-    }
-    if (tokens.includes('joke')) {
-        return "Why did the computer get cold? Because it forgot to close Windows! 😂";
+    message = message.toLowerCase();
+
+    if (message.includes("hi") || message.includes("hello") || message.includes("welcome")) {
+        return "Hi!";
+    } else if (message.includes("age") && message.includes("your")) {
+        return "I'm " + Bot_Age;
+    } else if (message.includes("how") && message.includes("are") && message.includes("you")) {
+        return "I'm fine ^_^";
+    } else if (message.includes("where") && message.includes("live") && message.includes("you")) {
+        return "I live in " + Bot_Country;
     }
 
     return "Sorry, I didn't get it :(";
 }
+
+module.exports = { ChatbotReply };
