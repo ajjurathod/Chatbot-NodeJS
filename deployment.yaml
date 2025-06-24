@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chatbot-deployment
+  labels:
+    app: chatbot
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: chatbot
+  template:
+    metadata:
+      name: chatbot-pod
+      labels:
+        app: chatbot
+    spec:
+      containers:
+        - name: chatbot-cont
+          image: ajjurathod1998/terraform.v:0
+          ports:
+            - containerPort: 3000
