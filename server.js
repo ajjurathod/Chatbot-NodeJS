@@ -1,36 +1,45 @@
 const express = require('express');
-const bodyParser = require('body-parser');
-const path = require('path');
-const Chatbot = require('./Chatbot');
-
 const app = express();
-const PORT = process.env.PORT || 3000;
+const port = 3000;
 
-// Middleware to parse JSON
-app.use(bodyParser.json());
+// Middleware to parse JSON request bodies
+app.use(express.json());
 
-// Simple route to test server
+// Handle GET at root (optional)
 app.get('/', (req, res) => {
-    res.send('Chatbot server is running!');
+  res.send('Chatbot server is running! Send a POST request to /chat');
 });
 
-// Serve chat UI page
-app.get('/chat-ui', (req, res) => {
-    res.sendFile(path.join(__dirname, 'chat.html'));
-});
-
-// Endpoint to handle chatbot messages
+// Handle chatbot POST requests
 app.post('/chat', (req, res) => {
-    const userMessage = req.body.message;
-    if (!userMessage) {
-        return res.status(400).json({ error: 'Missing message in request body' });
-    }
+  const userMessage = req.body.message;
 
-    const botReply = Chatbot.ChatbotReply(userMessage);
-    res.json({ reply: botReply });
+  if (!userMessage) {
+    return res.status(400).json({ reply: 'Please provide a message.' });
+  }
+
+  const msg = userMessage.toLowerCase().trim();
+  let botReply = '';
+
+  // Simple conversation logic
+  if (msg === 'hi' || msg === 'hello') {
+    botReply = 'Hello!';
+  } else if (msg === 'how are you?') {
+    botReply = 'I am fine, thank you! How are you?';
+  } else if (msg === 'had lunch' || msg === 'have you had lunch?') {
+    botReply = 'Not yet. What about you?';
+  } else if (msg === 'yes had') {
+    botReply = 'Great! Hope you enjoyed it.';
+  } else if (msg === 'no not yet') {
+    botReply = 'You should eat soon!';
+  } else {
+    botReply = `You said: ${userMessage}`;
+  }
+
+  res.json({ reply: botReply });
 });
 
-// Start the server
-app.listen(PORT, () => {
-    console.log(`Chatbot server is listening on port ${PORT}`);
+app.listen(port, () => {
+  console.log(`Chatbot server is listening at http://0.0.0.0:${port}`);
 });
+
