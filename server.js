@@ -9,15 +9,16 @@ const PORT = process.env.PORT || 3000;
 // Middleware to parse JSON
 app.use(bodyParser.json());
 
-// Simple route to test server
+// Simple route to test server — now redirects
 app.get('/', (req, res) => {
-    res.send('Chatbot server is running!');
+    res.redirect('/chat-ui');
 });
 
 // Serve chat UI page
 app.get('/chat-ui', (req, res) => {
     res.sendFile(path.join(__dirname, 'chat.html'));
 });
+
 
 // Endpoint to handle chatbot messages
 app.post('/chat', (req, res) => {
